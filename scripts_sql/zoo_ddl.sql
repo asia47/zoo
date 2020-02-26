@@ -1,14 +1,6 @@
 -- DDL zoo
 
--- CREACION DE LA BD
-/*USE master
-GO
 
-DROP DATABASE IF EXISTS zoo
-GO
-
-CREATE DATABASE zoo
-GO*/
 
 USE zoo
 GO
