@@ -76,6 +76,7 @@ CREATE TABLE recinto (
 	localizacion varchar(5) not null,
 	dimension integer not null
 )
+ON zoo_db_fg1
 GO
 
 CREATE TABLE empleado (
@@ -88,6 +89,7 @@ CREATE TABLE empleado (
 	direccion varchar(50) not null,
 	id_turno integer FOREIGN KEY REFERENCES turno(id) not null
 )
+ON zoo_db_fg1
 GO
 
 CREATE TABLE animal (
@@ -102,6 +104,7 @@ CREATE TABLE animal (
 	id_madre integer FOREIGN KEY REFERENCES animal(id),
 	id_recinto integer FOREIGN KEY REFERENCES recinto(id)
 )
+ON zoo_db_fg1
 GO
 
 CREATE TABLE espectaculo (
@@ -111,6 +114,7 @@ CREATE TABLE espectaculo (
 	id_tarifa integer FOREIGN KEY REFERENCES tarifa(id) not null,
 	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null
 )
+ON zoo_db_fg1
 GO
 
 --  relaciones
