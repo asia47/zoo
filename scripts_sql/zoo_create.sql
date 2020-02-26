@@ -19,8 +19,20 @@ DROP DATABASE IF EXISTS zoo
 GO
 
 CREATE DATABASE zoo ON PRIMARY (
-	NAME = 'zoo_db',
-	FILENAME = 'C:\db_data\zoo_db.mdf',
+	NAME = 'zoo_db_prim',
+	FILENAME = 'C:\db_data\zoo_db_prim.mdf',
+	SIZE = 30MB,
+	MAXSIZE = 2GB,
+	FILEGROWTH = 512MB
+), FILEGROUP zoo_db_fg1 (
+	NAME = 'zoo_db_fg1_dat1',
+	FILENAME = 'C:\db_data\zoo_db_fg1_dat1.ndf',
+	SIZE = 30MB,
+	MAXSIZE = 2GB,
+	FILEGROWTH = 512MB
+), (
+	NAME = 'zoo_db_fg1_dat2',
+	FILENAME = 'C:\db_data\zoo_db_fg1_dat2.ndf',
 	SIZE = 30MB,
 	MAXSIZE = 2GB,
 	FILEGROWTH = 512MB
@@ -32,3 +44,6 @@ CREATE DATABASE zoo ON PRIMARY (
 	FILEGROWTH = 100MB
 )
 GO
+
+
+
