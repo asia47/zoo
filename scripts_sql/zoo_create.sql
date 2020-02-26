@@ -12,7 +12,7 @@ GO*/
 
 --CREACIÓN DETALLADA DE LA BASE DE DATOS
 
-USER master
+USE master
 GO
 
 DROP DATABASE IF EXISTS zoo
@@ -23,7 +23,7 @@ CREATE DATABASE zoo ON PRIMARY (
 	FILENAME = 'C:\db_data\zoo_db.mdf',
 	SIZE = 30MB,
 	MAXSIZE = 2GB,
-	FILEGROUTH = 512MB
+	FILEGROWTH = 512MB
 ) LOG ON (
 	NAME = 'zoo_db_log',
 	FILENAME = 'C:\db_data\zoo_db_log.ldf',
