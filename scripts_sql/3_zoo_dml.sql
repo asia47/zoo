@@ -1,4 +1,5 @@
 --zoo dml
+-- Cuarto en ejecutar
 USE zoo
 GO
 
@@ -31,12 +32,25 @@ INSERT INTO empleado (id, tipo, nombre, dni, nss, telefono, direccion, id_turno)
 		(4, 'Mantenimiento', 'Álvaro Lapuerta', '23489877Q', '123678456', '986673982', 'O Testal', 2)
 GO
 
+/*INSERT INTO animal 
+	(id, nombre, especie, sexo, color, fecha_nacimiento, nacimiento_en_cautiverio, id_padre, id_madre, id_recinto)
+	VALUES
+		(1, 'Copito de nieve', 'Orangután', 'M', 'Blanco', '2000-02-03', 0, null, null, 1)
+GO */
+
+INSERT INTO animal
+	(id, nombre, especie, sexo, color, fecha_nacimiento, nacimiento_en_cautiverio, imagen, imagen_id, id_padre, id_madre, id_recinto)
+	SELECT 1, 'Copito de nieve', 'Orangután', 'M', 'Blanco', '2000-02-03', 0, BulkColumn, newid(), null, null, 1
+		FROM openrowset(BULK 'C:\Users\clientedb\Desktop\zoo\imagenes\copito.jpg', SINGLE_BLOB) AS f
+GO
+
+/*
 INSERT INTO animal 
 	(id, nombre, especie, sexo, color, fecha_nacimiento, nacimiento_en_cautiverio, id_padre, id_madre, id_recinto)
 	VALUES
-		(1, 'Copito de nieve', 'Orangután', 'M', 'Blanco', '2000-02-03', 0, null, null, 1),
 		(2, 'Rita', 'Orangután', 'H','Azul', '2001-02-03', 0, null, null, 1)
 GO
+
 
 INSERT INTO animal 
 	(id, nombre, especie, sexo, color, fecha_nacimiento, nacimiento_en_cautiverio, id_padre, id_madre, id_recinto)
@@ -80,6 +94,9 @@ INSERT INTO animal_espectaculo_cuidador (id_animal, id_espectaculo, id_cuidador,
 		(1, 1, 1, 'Todos los días de 19:00 a21:00'),
 		(2, 2, 2, 'Todos los sábados a las 16:00')
 
+GO */
+
+USE master
 GO
 
 

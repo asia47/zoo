@@ -1,6 +1,5 @@
 -- DDL zoo
-
-
+-- Tercero en ejecutar
 
 USE zoo
 GO
@@ -100,11 +99,14 @@ CREATE TABLE animal (
 	color varchar(20),
 	fecha_nacimiento date,
 	nacimiento_en_cautiverio bit,
+	imagen varbinary(max) FILESTREAM NULL,
+	imagen_id uniqueidentifier ROWGUIDCOL NOT NULL UNIQUE DEFAULT newsequentialid(),
 	id_padre integer FOREIGN KEY REFERENCES animal(id),
 	id_madre integer FOREIGN KEY REFERENCES animal(id),
 	id_recinto integer FOREIGN KEY REFERENCES recinto(id)
 )
 ON zoo_db_fg1
+filestream_on fs_files
 GO
 
 CREATE TABLE espectaculo (
@@ -150,4 +152,7 @@ CREATE TABLE animal_espectaculo_cuidador (
 )
 GO
 
+
+USE master
+GO
 

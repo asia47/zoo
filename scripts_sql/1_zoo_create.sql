@@ -1,4 +1,5 @@
 -- ZOO_CREATE
+-- Segundo en ejecutar
 
 -- CREACION SIMPLE DE LA BD
 /*USE master
@@ -36,6 +37,9 @@ CREATE DATABASE zoo ON PRIMARY (
 	SIZE = 30MB,
 	MAXSIZE = 2GB,
 	FILEGROWTH = 512MB
+), FILEGROUP fs_files CONTAINS FILESTREAM DEFAULT (
+	NAME = 'fs_files',
+	FILENAME = 'C:\db_data\fs_files'	
 ) LOG ON (
 	NAME = 'zoo_db_log',
 	FILENAME = 'C:\db_data\zoo_db_log.ldf',
@@ -45,5 +49,7 @@ CREATE DATABASE zoo ON PRIMARY (
 )
 GO
 
+USE master
+GO
 
 
