@@ -41,7 +41,19 @@ GO */
 INSERT INTO animal
 	(id, nombre, especie, sexo, color, fecha_nacimiento, nacimiento_en_cautiverio, imagen, imagen_id, id_padre, id_madre, id_recinto)
 	SELECT 1, 'Copito de nieve', 'Orangután', 'M', 'Blanco', '2000-02-03', 0, BulkColumn, newid(), null, null, 1
-		FROM openrowset(BULK 'C:\Users\clientedb\Desktop\zoo\imagenes\copito.jpg', SINGLE_BLOB) AS f
+		FROM openrowset(BULK 'C:\Users\clientedb\Desktop\zoo_git\imagenes\copito.jpg', SINGLE_BLOB) AS f
+GO
+
+INSERT INTO animal
+	(id, nombre, especie, sexo, color, fecha_nacimiento, nacimiento_en_cautiverio, imagen, imagen_id, id_padre, id_madre, id_recinto)
+	SELECT 2, 'Rita', 'Orangután', 'H', 'Azul', '2001-02-03', 0, BulkColumn, newid(), null, null, 1
+		FROM openrowset(BULK 'C:\Users\clientedb\Desktop\zoo_git\imagenes\rita.jpg', SINGLE_BLOB) AS f
+GO
+
+INSERT INTO animal
+	(id, nombre, especie, sexo, color, fecha_nacimiento, nacimiento_en_cautiverio, imagen, imagen_id, id_padre, id_madre, id_recinto)
+	SELECT 3, 'Copito de nieve junior', 'Orangután', 'H', 'Negro', '2015-02-03', 0, BulkColumn, newid(), null, null, 1
+		FROM openrowset(BULK 'C:\Users\clientedb\Desktop\zoo_git\imagenes\copito_jr.jpg', SINGLE_BLOB) AS f
 GO
 
 /*
@@ -57,6 +69,7 @@ INSERT INTO animal
 	VALUES
 		(3, 'Copito de nieve junior', 'Orangután', 'H','Negro', '2015-02-03', 1, 1, 2, 1)
 GO
+*/
 
 INSERT INTO espectaculo (id, nome, fecha, id_tarifa, id_recinto)
 	VALUES 
@@ -94,7 +107,7 @@ INSERT INTO animal_espectaculo_cuidador (id_animal, id_espectaculo, id_cuidador,
 		(1, 1, 1, 'Todos los días de 19:00 a21:00'),
 		(2, 2, 2, 'Todos los sábados a las 16:00')
 
-GO */
+GO 
 
 USE master
 GO

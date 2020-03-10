@@ -46,6 +46,9 @@ CREATE DATABASE zoo ON PRIMARY (
 	SIZE = 10MB,
 	MAXSIZE = 512MB,
 	FILEGROWTH = 100MB
+) WITH FILESTREAM (
+	non_transacted_access = full,
+	directory_name = 'cont_rrcc_de_filetables'	-- contenedor de recursos compartidos de filetables
 )
 GO
 

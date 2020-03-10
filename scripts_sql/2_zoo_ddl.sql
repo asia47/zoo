@@ -7,6 +7,9 @@ GO
 -- CREACION DE TABLAS
 -- borrado de tablas
 
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'fotos_eventos_filetable' AND type = 'U')
+	DROP TABLE fotos_eventos_filetable
+GO
 
 IF EXISTS (SELECT name FROM sysobjects WHERE name = 'animal_espectaculo_cuidador' AND type = 'U')
 	DROP TABLE animal_espectaculo_cuidador
@@ -152,6 +155,14 @@ CREATE TABLE animal_espectaculo_cuidador (
 )
 GO
 
+-- tabla de tipo filetable vinculada al recurso compartido: 
+-- \\localhost\MSSQLSERVER\contenedor_de_carpetas_de_filetable\fotos_eventos
+-- esta tabla lista las fotos guardadas en el recurso compartido fotos_eventos
+CREATE TABLE fotos_eventos_filetable AS FILETABLE WITH (
+	filetable_directory = 'fotos_eventos',
+	filetable_collate_filename = database_default
+)
+GO
 
 USE master
 GO
