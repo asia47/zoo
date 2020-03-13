@@ -109,7 +109,11 @@ INSERT INTO animal_espectaculo_cuidador (id_animal, id_espectaculo, id_cuidador,
 		(1, 1, 1, 'Todos los días de 19:00 a21:00'),
 		(2, 2, 2, 'Todos los sábados a las 16:00')
 
-GO 
+GO
+
+INSERT INTO nombre_visitante_actual (id, nombre, num_entradas_compradas)
+	VALUES (1, 'Maria', 4)
+GO
 
 -- UPDATES
 

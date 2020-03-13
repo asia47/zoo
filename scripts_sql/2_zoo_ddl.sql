@@ -39,6 +39,10 @@ IF EXISTS (SELECT name FROM sysobjects WHERE name = 'animal' AND type = 'U')
 	DROP TABLE animal
 GO
 
+IF EXISTS (SELECT name FROM sysobjects WHERE name = 'empleado_history' AND type = 'U')
+	DROP TABLE empleado_history
+GO
+
 IF EXISTS (SELECT name FROM sysobjects WHERE name = 'empleado' AND type = 'U')
 	DROP TABLE empleado
 GO
@@ -120,37 +124,40 @@ filestream_on fs_files
 GO
 
 CREATE TABLE espectaculo (
-	id integer PRIMARY KEY not null,
+	id integer not null PRIMARY KEY,
 	nome varchar(20) not null,
 	fecha datetime not null,
 	id_tarifa integer FOREIGN KEY REFERENCES tarifa(id) not null,
 	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null
 )
-ON zoo_db_fg1
 GO
 
 --  relaciones
 CREATE TABLE recinto_mantenimiento (
 	id_mantenimiento integer FOREIGN KEY REFERENCES empleado(id) not null,
-	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null
+	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null,
+	PRIMARY KEY (id_mantenimiento, id_recinto)
 )
 GO
 
 CREATE TABLE recinto_limpiador (
 	id_limpiador integer FOREIGN KEY REFERENCES empleado(id) not null,
-	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null
+	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null,
+	PRIMARY KEY (id_limpiador, id_recinto)
 )
 GO
 
 CREATE TABLE animal_cuidador (
 	id_cuidador integer FOREIGN KEY REFERENCES empleado(id) not null,
-	id_animal integer FOREIGN KEY REFERENCES animal(id) not null
+	id_animal integer FOREIGN KEY REFERENCES animal(id) not null,
+	PRIMARY KEY (id_cuidador, id_animal)
 )
 GO
 
 CREATE TABLE animal_veterinario (
 	id_veterinario integer FOREIGN KEY REFERENCES empleado(id) not null,
-	id_animal integer FOREIGN KEY REFERENCES animal(id) not null
+	id_animal integer FOREIGN KEY REFERENCES animal(id) not null,
+	PRIMARY KEY (id_veterinario, id_animal)
 )
 GO
 
@@ -170,6 +177,18 @@ CREATE TABLE fotos_eventos_filetable AS FILETABLE WITH (
 	filetable_collate_filename = database_default
 )
 GO
+
+-- Cuando un visitante compra una o varias entradas para el zoo
+-- se le pregunta un nombre. Se registra en esta tabla 
+-- hasta que acabe su visita.
+CREATE TABLE nombre_visitante_actual (
+	id integer not null PRIMARY KEY NONCLUSTERED HASH WITH (bucket_count = 300),
+	nombre varchar(50) not null,
+	num_entradas_compradas int not null default 1
+) WITH (
+	MEMORY_OPTIMIZED = ON,
+	DURABILITY = SCHEMA_AND_DATA
+)
 
 USE master
 GO

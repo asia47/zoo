@@ -40,6 +40,10 @@ CREATE DATABASE zoo ON PRIMARY (
 ), FILEGROUP fs_files CONTAINS FILESTREAM DEFAULT (
 	NAME = 'fs_files',
 	FILENAME = 'C:\db_data\fs_files'	
+), FILEGROUP zoo_db_fg_mem CONTAINS MEMORY_OPTIMIZED_DATA (
+	NAME = 'zoo_db_fg_mem',
+	FILENAME = 'C:\db_data\zoo_db_fg_mem',
+	MAXSIZE = UNLIMITED
 ) LOG ON (
 	NAME = 'zoo_db_log',
 	FILENAME = 'C:\db_data\zoo_db_log.ldf',

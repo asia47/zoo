@@ -7,10 +7,13 @@ GO
 -- PARA COMPROBAR QUE LA TABLA TEMPORAL EMPLEADO FUNCIONA
 
 SELECT * FROM empleado
-go
+GO
 
 SELECT * FROM empleado_history
-go
+GO
+
+SELECT * FROM nombre_visitante_actual
+GO
 
 */
 
