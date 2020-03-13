@@ -89,9 +89,16 @@ CREATE TABLE empleado (
 	nss varchar(12) not null,
 	telefono integer not null,
 	direccion varchar(50) not null,
-	id_turno integer FOREIGN KEY REFERENCES turno(id) not null
+	id_turno integer FOREIGN KEY REFERENCES turno(id) not null,
+	valid_from datetime2 GENERATED ALWAYS AS ROW START,
+	valid_to datetime2 GENERATED ALWAYS AS ROW END,
+	PERIOD FOR SYSTEM_TIME (valid_from, valid_to)
 )
 ON zoo_db_fg1
+WITH (
+	SYSTEM_VERSIONING = ON 
+	(HISTORY_TABLE = dbo.empleado_history)
+)
 GO
 
 CREATE TABLE animal (

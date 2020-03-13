@@ -3,6 +3,8 @@
 USE zoo
 GO
 
+-- INSERTS
+
 INSERT INTO turno (id, fecha_inicio, fecha_fin, hora_inicio, hora_fin)
 	VALUES 
 		(1, '2020-01-01', '2020-12-31', '09:00:00', '17:00:00'),
@@ -108,6 +110,13 @@ INSERT INTO animal_espectaculo_cuidador (id_animal, id_espectaculo, id_cuidador,
 		(2, 2, 2, 'Todos los sábados a las 16:00')
 
 GO 
+
+-- UPDATES
+
+UPDATE empleado 
+	SET nombre = 'Alvaro Laventana'
+	where id = 4
+go
 
 USE master
 GO
