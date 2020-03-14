@@ -4,6 +4,21 @@
 USE zoo
 GO
 
+-- FUNCIONES Y ESQUEMAS DE PARTICIONADO
+-- Para particionar necesitamos crear una fuinción de partición
+CREATE PARTITION FUNCTION fecha_espectaculo_func (datetime)
+AS RANGE RIGHT
+	FOR VALUES('2019-01-01', '2020-01-01')
+GO
+
+-- Luego aplicamos la función de partición a un nuevo 
+-- esquema de partición
+CREATE PARTITION SCHEME fecha_espectaculo_sch
+AS PARTITION fecha_espectaculo_func
+	TO (fg_esp_antiguo, fg_esp_2019, fg_esp_2020)
+GO
+
+
 -- CREACION DE TABLAS
 -- borrado de tablas
 
@@ -124,12 +139,13 @@ filestream_on fs_files
 GO
 
 CREATE TABLE espectaculo (
-	id integer not null PRIMARY KEY,
+	id integer not null,
 	nome varchar(20) not null,
 	fecha datetime not null,
 	id_tarifa integer FOREIGN KEY REFERENCES tarifa(id) not null,
-	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null
-)
+	id_recinto integer FOREIGN KEY REFERENCES recinto(id) not null,
+	PRIMARY KEY (id, fecha)
+) ON fecha_espectaculo_sch (fecha)
 GO
 
 --  relaciones
@@ -163,9 +179,11 @@ GO
 
 CREATE TABLE animal_espectaculo_cuidador (
 	id_cuidador integer FOREIGN KEY REFERENCES empleado(id) not null,
-	id_espectaculo integer FOREIGN KEY REFERENCES espectaculo(id) not null,
+	id_espectaculo integer not null,
+	fecha_espectaculo datetime not null,
 	id_animal integer FOREIGN KEY REFERENCES animal(id) not null,
-	horario varchar(50) not null
+	horario varchar(50) not null,
+	FOREIGN KEY (id_espectaculo, fecha_espectaculo) REFERENCES espectaculo(id, fecha)
 )
 GO
 

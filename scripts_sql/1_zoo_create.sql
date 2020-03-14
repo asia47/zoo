@@ -19,6 +19,8 @@ GO
 DROP DATABASE IF EXISTS zoo
 GO
 
+-- fg_esp_antiguo, fg_esp_2019, fg_esp_2020
+
 CREATE DATABASE zoo ON PRIMARY (
 	NAME = 'zoo_db_prim',
 	FILENAME = 'C:\db_data\zoo_db_prim.mdf',
@@ -34,6 +36,24 @@ CREATE DATABASE zoo ON PRIMARY (
 ), (
 	NAME = 'zoo_db_fg1_dat2',
 	FILENAME = 'C:\db_data\zoo_db_fg1_dat2.ndf',
+	SIZE = 30MB,
+	MAXSIZE = 2GB,
+	FILEGROWTH = 512MB
+),FILEGROUP fg_esp_antiguo (
+	NAME = 'fg_esp_antiguo',
+	FILENAME = 'C:\db_data\fg_esp_antiguo.ndf',
+	SIZE = 30MB,
+	MAXSIZE = 2GB,
+	FILEGROWTH = 512MB
+), FILEGROUP fg_esp_2019 (
+	NAME = 'fg_esp_2019',
+	FILENAME = 'C:\db_data\fg_esp_2019.ndf',
+	SIZE = 30MB,
+	MAXSIZE = 2GB,
+	FILEGROWTH = 512MB
+), FILEGROUP fg_esp_2020 (
+	NAME = 'fg_esp_2020',
+	FILENAME = 'C:\db_data\fg_esp_2020.ndf',
 	SIZE = 30MB,
 	MAXSIZE = 2GB,
 	FILEGROWTH = 512MB

@@ -75,9 +75,9 @@ GO
 
 INSERT INTO espectaculo (id, nome, fecha, id_tarifa, id_recinto)
 	VALUES 
-		(1, 'Orangutanes volando', '2018-01-01', 1, 1),
-		(2, 'Orangutanes bailando', '2018-02-02', 3, 3),
-		(3, 'Orangutanes cantando', '2018-02-03', 2, 2)
+		(1, 'Orangutanes volando', '2018-01-04', 1, 1),
+		(2, 'Orangutanes bailando', '2019-02-05', 3, 3),
+		(3, 'Orangutanes cantando', '2020-03-06', 2, 2)
 GO
 
 INSERT INTO recinto_mantenimiento(id_mantenimiento, id_recinto)
@@ -104,10 +104,10 @@ INSERT INTO animal_veterinario(id_animal, id_veterinario)
 		(2, 2)
 GO
 
-INSERT INTO animal_espectaculo_cuidador (id_animal, id_espectaculo, id_cuidador, horario)
+INSERT INTO animal_espectaculo_cuidador (id_animal, id_espectaculo, fecha_espectaculo, id_cuidador, horario)
 	VALUES 
-		(1, 1, 1, 'Todos los días de 19:00 a21:00'),
-		(2, 2, 2, 'Todos los sábados a las 16:00')
+		(1, 1, '2018-01-04', 1, 'Todos los días de 19:00 a21:00'),
+		(2, 2, '2019-02-05', 2, 'Todos los sábados a las 16:00')
 
 GO
 
