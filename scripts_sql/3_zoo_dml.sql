@@ -115,12 +115,38 @@ INSERT INTO nombre_visitante_actual (id, nombre, num_entradas_compradas)
 	VALUES (1, 'Maria', 4)
 GO
 
--- UPDATES
+-- UPDATES PARA QUE LA TABLA TEMPORAL EMPLEADO TENGA ALGUN REGISTRO
+
+WAITFOR DELAY '00:00:02' -- esperamos 2 segundos
+GO
 
 UPDATE empleado 
 	SET nombre = 'Alvaro Laventana'
-	where id = 4
-go
+	WHERE id = 4
+GO
+
+WAITFOR DELAY '00:00:02' -- esperamos 2 segundos
+GO
+
+INSERT INTO empleado (id, tipo, nombre, dni, nss, telefono, direccion, id_turno)
+	VALUES
+		(5, 'Mantenimiento', 'Pepe Gotera', '48111633Y', '428723763', '981676665', 'O Corgo 19', 1)
+GO
+
+WAITFOR DELAY '00:00:02' -- esperamos 2 segundos
+GO
+
+UPDATE empleado 
+	SET nombre = 'Paco Gotera'
+	WHERE id = 5
+GO
+
+WAITFOR DELAY '00:00:02' -- esperamos 2 segundos
+GO
+
+DELETE FROM empleado
+	WHERE id = 5
+GO
 
 USE master
 GO
