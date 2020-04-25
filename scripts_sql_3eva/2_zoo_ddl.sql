@@ -108,6 +108,8 @@ CREATE TABLE empleado (
 	nss varchar(12) not null,
 	telefono integer not null,
 	direccion varchar(50) not null,
+	correo_electronico varchar(100) not null,
+	fecha_contratacion date not null,
 	id_turno integer FOREIGN KEY REFERENCES turno(id) not null,
 	valid_from datetime2 GENERATED ALWAYS AS ROW START,
 	valid_to datetime2 GENERATED ALWAYS AS ROW END,
