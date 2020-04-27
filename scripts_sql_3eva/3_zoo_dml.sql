@@ -31,7 +31,11 @@ INSERT INTO empleado (id, tipo, nombre, dni, nss, telefono, direccion, correo_el
 		(1, 'Cuidador', 'Manuel Charlín', '23785264N', '128723763', '986873789', 'O Freixo 12', 'man_char@far.com', '2001-01-01', 1),
 		(2, 'Veterinario', 'Paco Vázquez', '23785265O', '128723764', '986873780', 'O Medrón 23', 'pac_vaz@lacoru.com','2002-01-01', 2),
 		(3, 'Limpiador', 'Álvaro Cotino', '23785266P', '128723765', '986873781', 'Parameán 10','alv_cot@valensia.com', '2003-01-01', 3),
-		(4, 'Mantenimiento', 'Álvaro Lapuerta', '23489877Q', '123678456', '986673982', 'O Testal', 'alv_lap@pap_barcenas.com', '2004-01-01', 2)
+		(4, 'Mantenimiento', 'Álvaro Lapuerta', '23489877Q', '123678456', '986673982', 'O Testal', 'alv_lap@pap_barcenas.com', '2004-01-01', 2),
+		(5, 'Mantenimiento', 'Álvaro Lapuerta-dos', '23489878X', '123678457', '888777444', 'O Testal2', 'a@pap_barcenas.com', '2004-02-01', 1),
+		(6, 'Cuidador', 'Manuel Charlín-dos', '23489879O', '123678458', '666222666', 'O Freixo 12_2', 's@pap_barcenas.com', '2005-06-01', 3),
+		(7, 'Veterinario', 'Paco Vázquez-dos', '23489875P', '123678459', '618681444', 'Praza España-Roma', 'd@pap_barcenas.com', '2011-01-10', 1),
+		(8, 'Limpiador', 'Álvaro Cotino-dos', '23489875E', '123678460', '655334798', 'Parameán 10_2', 'f@pap_barcenas.com', '2009-01-20', 2)
 GO
 
 /*INSERT INTO animal 
@@ -115,7 +119,7 @@ GO
 
 INSERT INTO empleado (id, tipo, nombre, dni, nss, telefono, direccion, correo_electronico, fecha_contratacion, id_turno)
 	VALUES
-		(5, 'Mantenimiento', 'Pepe Gotera', '48111633Y', '428723763', '981676665', 'O Corgo 19', 'pep_got@yahoo.es', '2005-01-01', 1)
+		(9, 'Mantenimiento', 'Pepe Gotera', '48111633Y', '428723763', '981676665', 'O Corgo 19', 'pep_got@yahoo.es', '2005-01-01', 1)
 GO
 
 WAITFOR DELAY '00:00:02' -- esperamos 2 segundos
@@ -278,11 +282,14 @@ USE master
 GO
 
 -- el backup de la bd ya sale encriptado, ya que la encriptación está activada en esta bd
+/*
 BACKUP DATABASE zoo 
 	TO DISK = 'C:\temp\zoo_backup_encriptado.bak'
 GO
+*/
 
 -- Hacemos backup del certificado
+/*
 BACKUP CERTIFICATE certificado_servidor_zoo
     TO FILE = 'C:\temp\certificado_servidor_zoo.crt'
     WITH PRIVATE KEY (
@@ -290,6 +297,7 @@ BACKUP CERTIFICATE certificado_servidor_zoo
         ENCRYPTION BY PASSWORD = 'ABCD1234.'
 	)
 GO
+*/
 
 /*
 -- --- SEGUNDO Servidor ------------------------------------------------------------
@@ -381,6 +389,91 @@ GO
 
 REVERT
 GO
+
+-- -- LIMITAR VISUALIZACIÖN DE DATOS POR USUARIO -------------------------------------------------
+
+--Concedemos permisos
+GRANT SELECT ON empleado TO Cuidador;
+GRANT SELECT ON empleado TO Veterinario;
+GRANT SELECT ON empleado TO Limpiador;  
+GRANT SELECT ON empleado TO Mantenimiento;
+GO
+
+-- empleado predicado de la  función
+
+DROP FUNCTION IF EXISTS dbo.empleado_predicado_funcion
+GO
+
+CREATE FUNCTION dbo.empleado_predicado_funcion(@tipo_empleado AS SYSNAME)
+	RETURNS TABLE
+	WITH SCHEMABINDING
+	AS
+		RETURN SELECT 1 AS AccessRight
+			WHERE @tipo_empleado = USER_NAME() OR USER_NAME() = 'dbo'
+GO
+
+--Security policy
+DROP SECURITY POLICY IF EXISTS politica_seguridad_empleados
+GO
+CREATE SECURITY POLICY politica_seguridad_empleados
+	--Security Predicate
+	ADD FILTER PREDICATE dbo.empleado_predicado_funcion(tipo) 
+		ON dbo.empleado
+		WITH (STATE = ON)
+GO
+
+PRINT USER
+GO
+-- dbo
+
+SELECT * FROM dbo.empleado
+GO
+-- Vemos toda la info como dbo
+
+
+EXECUTE AS USER = 'Veterinario'
+GO
+
+SELECT * FROM dbo.empleado
+GO
+-- Vemos únicamente la info de Veterinario
+
+-- Nos impersonamos como dbo
+REVERT
+GO
+
+-- GRANT
+GRANT INSERT, UPDATE, DELETE ON empleado TO Cuidador;
+GRANT INSERT, UPDATE, DELETE ON empleado TO Veterinario;
+GRANT INSERT, UPDATE, DELETE ON empleado TO Limpiador;
+GRANT INSERT, UPDATE, DELETE ON empleado TO Mantenimiento;
+GO
+
+-- Puede insertar !!!!
+
+-- Para que sólo pueda insertar valores propios del usuario y no valores de otros
+-- usuarios distintos:
+ALTER SECURITY POLICY politica_seguridad_empleados
+	ADD BLOCK PREDICATE dbo.empleado_predicado_funcion(tipo)
+		ON dbo.empleado AFTER INSERT
+GO
+
+/*
+EXECUTE AS USER  = 'Veterinario'
+GO
+
+INSERT INTO empleado (id, tipo, nombre, nss, telefono, direccion, correo_electronico, fecha_contratacion, id_turno)
+	VALUES
+		(11, 'Cuidador', 'Emilio Rodriguez', '428723755', '655887799', 'Canal 54', 'pep_got@ppp.es', '2005-01-12', 2)
+GO
+
+Msg 33504, Level 16, State 1, Line 465
+The attempted operation failed because the target object 'zoo.dbo.empleado' has a block predicate that conflicts with this operation. If the operation is performed on a view, the block predicate might be enforced on the underlying table. Modify the operation to target only the rows that are allowed by the block predicate.
+The statement has been terminated.
+
+REVERT
+GO
+*/
 
 -- Para finalizar el script volvemos a master
 USE master
