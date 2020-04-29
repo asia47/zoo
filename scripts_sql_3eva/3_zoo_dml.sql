@@ -475,6 +475,52 @@ REVERT
 GO
 */
 
+-- -- AUDITORIAS SOBRE TABLAS -------------------------------------------------
+
+-- Crear auditoría cada vez que se consulte, actualice o inserte algo en la tabla tarifa
+
+USE master
+GO
+
+create server audit auditoria_tarifa
+to file (
+	filepath = 'C:\auditoria\',
+	maxsize = 0 mb,
+	max_rollover_files = 2147483647,
+	reserve_disk_space = off
+) with (
+	queue_delay = 1000,
+	on_failure = continue
+)
+go
+
+ALTER SERVER AUDIT auditoria_tarifa WITH (STATE = ON) 
+GO
+
+USE zoo
+GO
+
+CREATE DATABASE AUDIT SPECIFICATION [especificacion_auditoria_tarifa]
+FOR SERVER AUDIT auditoria_tarifa
+	ADD (SELECT ON OBJECT::[dbo].[tarifa] BY [dbo]),
+	ADD (INSERT ON OBJECT::[dbo].[tarifa] BY [dbo]),
+	ADD (UPDATE ON OBJECT::[dbo].[tarifa] BY [dbo]),
+	ADD (DELETE ON OBJECT::[dbo].[tarifa] BY [dbo])
+GO
+
+ALTER DATABASE AUDIT SPECIFICATION [especificacion_auditoria_tarifa]
+	WITH (STATE = ON) 
+GO
+
+SELECT * 
+FROM tarifa
+GO
+
+--Para ver los registros de una auditoría con salida a un archivo:
+SELECT * FROM sys.fn_get_audit_file ('C:\auditoria\*.sqlaudit', default, default);
+GO
+
+
 -- Para finalizar el script volvemos a master
 USE master
 GO
